@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ToDoList from './components/toDoList/toDoList';
+import Completedlist from './components/completedList/completedList';
 
 class ToDo extends React.Component {
   constructor(props) {
@@ -51,8 +53,8 @@ class ToDo extends React.Component {
     this.setState({ toDoList: tempToDoArr});
     this.setState({ editDetails: tempToDoArr[index].task});
   }
-  handleEditChanges = (event) => {
-    this.setState({ editDetails: event.target.value});
+  handleEditChanges = (data) => {
+    this.setState({ editDetails: data});
   }
   saveEditedData = (index) => {
     let tempToDoArr = this.state.toDoList;
@@ -81,49 +83,8 @@ class ToDo extends React.Component {
         <input type='text' name='task' value={this.state.task} onChange={this.handleChanges}/>
         <button onClick={this.addToDo}>+</button>
         <button onClick={this.clearToDo}>Clear</button>
-        <br/>
-        <h4>
-          <div style={{ display: (this.state.toDoList.length) ? 'block' : 'none' }}>
-            Task-to-do: {this.state.toDoList.length}
-          </div>
-        </h4>
-        <table>
-          <tbody>
-            {this.state.toDoList.map((item, index) => (
-              <tr key={index}>
-                  <div style={{ display: (item.editData) ? 'none' : 'block' }}>
-                    <td>{item.task}</td>
-                    <td>{item.date}</td>
-                    <td> <button onClick={() => this.addToCompleted(index)}>Completed</button> </td>
-                    <td> <button onClick={() => this.editToDo(index)}>      Edit     </button> </td>
-                    <td> <button onClick={() => this.deleteToDo(index)}>    Delete   </button> </td>
-                  </div>
-                  <div style={{ display: (item.editData) ? 'block' : 'none' }}>
-                    <td colSpan="5">
-                      <input type='text' name='editDetails' value={this.state.editDetails} onChange={this.handleEditChanges}/>
-                      <button onClick={() => this.saveEditedData(index)}> Update </button>
-                    </td>
-                  </div>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <h4>
-          <div style={{ display: (this.state.completedList.length) ? 'block' : 'none' }}>
-            Completed-task: {this.state.completedList.length}
-          </div>
-        </h4>
-        <table>
-          <tbody>
-            {this.state.completedList.map((item, index) => (
-              <tr key={index}>
-                <td>{item.task}</td>
-                <td>Completed on {item.date}</td>
-                <td> <button onClick={() => this.deleteCompletedItem(index)}>Delete</button> </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <ToDoList toDoListData={this.state.toDoList} editData={this.state.editDetails} addToCompleted={(index) => this.addToCompleted(index)} editToDo={(index) => this.editToDo(index)} deleteToDo={(index) => this.deleteToDo(index)} handleEditChanges={(data) => this.handleEditChanges(data)} saveEditedData={(index) => this.saveEditedData(index)}/>
+        <Completedlist completedData={this.state.completedList} deleteCompletedItem={(index) => this.deleteCompletedItem(index)}/>
       </div>
     )
   }
